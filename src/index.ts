@@ -8,6 +8,7 @@ const app = express()
 app.use(express.json())
 
 app.post('/register', authController.register)
+app.post('/login', authController.logIn)
 
 const mongoURL = process.env.DB_URL
 
