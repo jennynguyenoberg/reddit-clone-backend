@@ -1,29 +1,13 @@
 import "dotenv/config"
 import express from 'express'
 import mongoose from 'mongoose'
-import User from "./models/User"
+import * as authController from './controllers/auth'
 
 const app = express()
 
 app.use(express.json())
 
-app.post('/register', async (req, res) => {
-  const { username, password } = req.body
-
-  try {
-    if (await User.findOne({ userName: username })) {
-      return res.status(400).json({ message: "Username taken" })
-    }
-
-    const user = new User({ userName: username, password })
-    await user.save()
-   
-    res.status(201).json({ username, id: user._id })
-  } catch (error) {
-      console.log(error)
-      res.status(500).send('Internal Server Error')
-  }
-})
+app.post('/register', authController.register)
 
 const mongoURL = process.env.DB_URL
 
