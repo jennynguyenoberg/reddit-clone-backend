@@ -29,7 +29,7 @@ export const logIn = async (req: Request, res: Response) => {
     const { username, password } = req.body
     
     // Hitta en användare
-    const user = await User.findOne({ userName: username })
+    const user = await User.findOne({ userName: username}, '+password')
     
     if (!user || await bcrypt.compare(password, user.password)) {
       return res.status(400).json({ message: 'Wrong username or password' })
