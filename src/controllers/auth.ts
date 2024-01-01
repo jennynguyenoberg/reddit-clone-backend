@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import User from '../models/User'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { assertDefined } from '../util/asserts'
 
 export const register = async (req: Request, res: Response) => {
   const { username, password } = req.body
@@ -69,13 +70,10 @@ export const refreshJWT = async (req: Request, res: Response) => {
   try {
     const decodedPayload = await jwt.verify(refreshToken, refreshTokenSecret) as { userId: string }
 
-    const secret = process.env.JWT_SECRET
-    if (!secret) {
-      throw Error('Missing JWT_SECRET')
-    }
-    
+    assertDefined(process.env.JWT_SECRET)
+
     // Returnera JWT
-    const token = jwt.sign({ userId: decodedPayload.userId}, secret, { expiresIn: '1h' })
+    const token = jwt.sign({ userId: decodedPayload.userId}, process.env.JWT_SECRET, { expiresIn: '1h' })
 
     return res.status(200).json({ token })
   } catch (error) {
