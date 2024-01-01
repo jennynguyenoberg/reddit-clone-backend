@@ -1,5 +1,5 @@
 import "dotenv/config"
-import express, { response } from 'express'
+import express from 'express'
 import mongoose from 'mongoose'
 import User from "./models/User"
 
@@ -11,6 +11,10 @@ app.post('/register', async (req, res) => {
   const { username, password } = req.body
 
   try {
+    if (await User.findOne({ userName: username })) {
+      return res.status(400).json({ message: "Username taken" })
+    }
+
     const user = new User({ userName: username, password })
     await user.save()
    
