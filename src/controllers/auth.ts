@@ -58,6 +58,32 @@ export const logIn = async (req: Request, res: Response) => {
         })
   }
 }
+export const refreshJWT = async (req: Request, res: Response) => { 
+  const { refreshToken } = req.body
+  
+  const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET
+  if (!refreshTokenSecret) {
+    throw Error('Missing REFRESH_TOKEN_SECRET')
+  }
+
+  try {
+    const decodedPayload = await jwt.verify(refreshToken, refreshTokenSecret) as { userId: string }
+
+    const secret = process.env.JWT_SECRET
+    if (!secret) {
+      throw Error('Missing JWT_SECRET')
+    }
+    
+    // Returnera JWT
+    const token = jwt.sign({ userId: decodedPayload.userId}, secret, { expiresIn: '1h' })
+
+    return res.status(200).json({ token })
+  } catch (error) {
+    console.log(error);
+    
+    return res.status(403).json({ message: 'Invalid token' })
+  }
+}
 
 export const profile = async (req: Request, res: Response) => {
   const { userId } = req
