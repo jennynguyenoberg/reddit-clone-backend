@@ -41,7 +41,7 @@ export const logIn = async (req: Request, res: Response) => {
     }
     
     // Returnera JWT
-    const token = jwt.sign({ userId: user._id }, secret)
+    const token = jwt.sign({ userId: user._id }, secret, { expiresIn: '1h' })
 
     res.status(200).json({ token, username: user.userName })
   } catch (error) {
