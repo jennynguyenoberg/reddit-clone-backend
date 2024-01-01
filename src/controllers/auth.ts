@@ -35,7 +35,6 @@ export const logIn = async (req: Request, res: Response) => {
     }
 
     const secret = process.env.JWT_SECRET
-
     if (!secret) {
       throw Error('Missing JWT_SECRET')
     }
@@ -43,7 +42,15 @@ export const logIn = async (req: Request, res: Response) => {
     // Returnera JWT
     const token = jwt.sign({ userId: user._id }, secret, { expiresIn: '1h' })
 
-    res.status(200).json({ token, username: user.userName })
+    const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET
+    if (!refreshTokenSecret) {
+      throw Error('Missing REFRESH_TOKEN_SECRET')
+    }
+    
+    // Returnera refresh-token
+    const refreshToken = jwt.sign({ userId: user._id }, refreshTokenSecret, { expiresIn: '1d' })
+
+    res.status(200).json({ token, refreshToken ,username: user.userName })
   } catch (error) {
     console.log('Error in login, error')
       res.status(501).json({
