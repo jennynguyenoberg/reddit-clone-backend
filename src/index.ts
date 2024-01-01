@@ -1,3 +1,4 @@
+import "dotenv/config"
 import express, { response } from 'express'
 import mongoose from 'mongoose'
 
@@ -7,9 +8,13 @@ app.use('/', (request, response) => {
   response.send('Hello, world!')
 })
 
-mongoose.connect('mongodb://localhost:27017/reddit-clone')
+const mongoURL = process.env.DB_URL
+
+if (!mongoURL) throw Error('Missing db url')
+
+mongoose.connect(mongoURL)
   .then(() => {
-    const PORT = 3000
+    const PORT = parseInt(process.env.PORT || '3000')
     
     app.listen(PORT, () => {
       console.log(`Backend listening on ${PORT}`)
