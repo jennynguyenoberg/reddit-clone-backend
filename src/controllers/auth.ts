@@ -31,7 +31,7 @@ export const logIn = async (req: Request, res: Response) => {
     const user = await User.findOne({ userName: username })
     
     if (!user || await bcrypt.compare(password, user.password)) {
-      return res.status(400).json({ message: '"Wrong username or password' })
+      return res.status(400).json({ message: 'Wrong username or password' })
     }
 
     const secret = process.env.JWT_SECRET
