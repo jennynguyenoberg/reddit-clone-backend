@@ -11,7 +11,6 @@ export const create = async (req: Request, res: Response) => {
     link,
     body,
     author: req.userId
-
   })
   
   try {
