@@ -2,6 +2,7 @@ import "dotenv/config"
 import express from 'express'
 import mongoose from 'mongoose'
 import * as authController from './controllers/auth'
+import validateToken from './middleware/validateToken'
 
 const app = express()
 
@@ -9,6 +10,7 @@ app.use(express.json())
 
 app.post('/register', authController.register)
 app.post('/login', authController.logIn)
+app.get('/profile', validateToken, authController.profile);
 
 const mongoURL = process.env.DB_URL
 
