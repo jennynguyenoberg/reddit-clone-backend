@@ -23,10 +23,23 @@ export const create = async (req: Request, res: Response) => {
 }
 
 export const getAllPosts = async (req: Request, res: Response) => {
-  const posts = await Post.find().populate('author')
+  const limit = 5
+  const page = 1
 
-  res.status(200).json(posts)
+  const posts = await Post
+    .find()
+    .limit(limit)
+    .skip(limit * (page - 1))
+    .populate('author')
+
+  const totalCount = await Post.countDocuments()
+
+  res.status(200).json({
+    posts,
+    totalPages: Math.ceil(totalCount/limit)
+  })
 }
+
 export const getPost = async (req: Request, res: Response) => {
   const { id } = req.params;
 
