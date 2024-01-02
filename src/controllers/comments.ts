@@ -35,7 +35,7 @@ export const deleteComment = async (req: Request, res: Response) => {
     if (!post) {
         return res.status(404).json({ message: 'Not post found for id: ' + postId });
     }
-
+    
     const comment = post.comments.id(commentId);
 
     if (!comment) {
