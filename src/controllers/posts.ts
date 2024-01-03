@@ -130,3 +130,25 @@ export const getPost = async (req: Request, res: Response) => {
 
   res.status(200).json(post)
 }
+
+export const deletePost = async (req: Request, res: Response) => {
+  const { postId } = req.params;
+  const { userId } = req;
+  assertDefined(userId);
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    return res
+      .status(404)
+      .json({ message: "Post not found for id: " + postId });
+  }
+
+  if (post.author.toString() !== userId) {
+    return res.status(403).json({ message: "Not authorized" });
+  }
+
+  await post.deleteOne();
+
+  return res.status(200).json({ message: "Post deleted" });
+};

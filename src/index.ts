@@ -26,6 +26,7 @@ app.post('/posts/:postId/downvote', validateToken, votesController.downvote);
 
 app.post('/posts/:postId/comments', validateToken, commentsController.createComment);
 app.delete('/posts/:postId/comments/:commentId', validateToken, commentsController.deleteComment);
+app.delete('/posts/:postId', validateToken, postsController.deletePost);
 
 const mongoURL = process.env.DB_URL
 
