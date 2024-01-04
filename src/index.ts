@@ -20,6 +20,7 @@ app.get("/profile", validateToken, authController.profile);
 app.post("/posts", validateToken, postsController.create);
 app.get("/posts", postsController.getAllPosts);
 app.get("/posts/:id", postsController.getPost);
+app.put('/posts/:id/update-post', validateToken, postsController.updatePost)
 
 app.post("/posts/:postId/upvote", validateToken, votesController.upvote);
 app.post("/posts/:postId/downvote", validateToken, votesController.downvote);
