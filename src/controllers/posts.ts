@@ -27,11 +27,9 @@ export const getAllPosts = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page?.toString() || "1");
 
   if (isNaN(page) || isNaN(limit)) {
-    res
-      .status(400)
-      .json({
-        message: "Malformed query object number: " + req.query.toString(),
-      });
+    res.status(400).json({
+      message: "Malformed query object number: " + req.query.toString(),
+    });
   }
 
   // const posts = await Post
@@ -172,25 +170,25 @@ export const deletePost = async (req: Request, res: Response) => {
 };
 
 export const updatePost = async (req: Request, res: Response) => {
-  const { id } = req.params
-  const { userId } = req
-  assertDefined(userId)
+  const { id } = req.params;
+  const { userId } = req;
+  assertDefined(userId);
 
-  const { title, link, body } = req.body
+  const { title, link, body } = req.body;
 
-  const post = await Post.findById(id)
+  const post = await Post.findById(id);
 
   if (!post) {
-      return res.status(404).json({ message: 'No post found for id: ' + id})
+    return res.status(404).json({ message: "No post found for id: " + id });
   }
 
   if (post.author.toString() !== userId) {
-      return res.status(403).json({ message: 'Not authorized' })
+    return res.status(403).json({ message: "Not authorized" });
   }
 
-  await post.updateOne({ title, link, body })
+  await post.updateOne({ title, link, body });
 
-  const updatedPost = await post.save()
+  const updatedPost = await post.save();
 
-  return res.status(200).json(updatedPost)
-}
+  return res.status(200).json(updatedPost);
+};
